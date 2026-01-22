@@ -1,0 +1,6 @@
+build
+dist
+uhdm
+capnproto/bin
+capnproto/include
+capnproto/lib
