@@ -29,6 +29,8 @@ class CustomHook(BuildHookInterface):
             for dirpath, _, filenames in walk(f"capnproto/{subdir}"):
                 for filename in filenames:
                     filepath = f"{dirpath}/{filename}"
-                    target_path = filepath.replace("capnproto/", "")
+                    target_path = filepath.replace("capnproto/", "").replace(
+                        "lib64", "lib"
+                    )
                     build_data["shared_data"][filepath] = target_path
         return version, build_data
