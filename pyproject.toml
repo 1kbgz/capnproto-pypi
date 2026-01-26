@@ -8,7 +8,7 @@ authors = [{name = "the capnproto-pypi authors", email = "dev@1kbgz.com"}]
 description="Cap’n Proto is an insanely fast data interchange format and capability-based RPC system."
 readme = "README.md"
 license = { text = "Apache-2.0" }
-version = "1.3.0rc0"
+version = "1.3.0rc1"
 requires-python = ">=3.10"
 keywords = []
 
@@ -41,39 +41,25 @@ Homepage = "https://github.com/1kbgz/capnproto-pypi"
 
 [tool.cibuildwheel]
 build = "cp310-* cp311-* cp312-* cp313-* cp314-*"
-test-command = "echo 'TODO'"
-test-requires = []
-
-[tool.cibuildwheel.linux]
-before-all ="""
-set -e
-cmake -B build src -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=capnproto
-cmake --build build --config Release -j 3
-cmake --install build
-rm -rf src build .gitmodules
-"""
-repair-wheel-command = "auditwheel -v show {wheel} && LD_LIBRARY_PATH=/project/uhdm/lib auditwheel -v repair -w {dest_dir} {wheel}"
-skip = "*i686"
-manylinux-x86_64-image = "manylinux_2_28"
-
-[tool.cibuildwheel.macos]
-before-all ="""
-set -e
-cmake -B build src -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=capnproto
-cmake --build build --config Release -j 3
-cmake --install build
-rm -rf src build .gitmodules
-"""
-environment = {MACOSX_DEPLOYMENT_TARGET=11.0}
-archs = "arm64"
-
-[tool.cibuildwheel.windows]
 before-all ="""
 cmake -B build src -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=capnproto && \
 cmake --build build --config Release -j 3 && \
 cmake --install build && \
 rm -rf src build .gitmodules
 """
+test-command = "echo 'TODO'"
+test-requires = []
+
+[tool.cibuildwheel.linux]
+repair-wheel-command = "auditwheel -v show {wheel} && LD_LIBRARY_PATH=/project/uhdm/lib auditwheel -v repair -w {dest_dir} {wheel}"
+skip = "*i686"
+manylinux-x86_64-image = "manylinux_2_28"
+
+[tool.cibuildwheel.macos]
+environment = {MACOSX_DEPLOYMENT_TARGET=11.0}
+archs = "arm64"
+
+[tool.cibuildwheel.windows]
 archs = "AMD64"
 skip = "*win32 *arm_64"
 
@@ -100,9 +86,3 @@ exclude = [
     "/.gitignore",
     "/pyproject.toml",
 ]
-
-[tool.hatch.build.targets.wheel.shared-data]
-"capnproto/bin/*" = "bin"
-"capnproto/include/*" = "include"
-"capnproto/lib/*" = "lib"
-"capnproto/lib64/*" = "lib"
